@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#define NUM_THREADS 5
+void* print_message(void* threadid) {
+    long tid;
+    tid = (long)threadid;
+    printf("Thread #%ld: Hello, World!\n", tid);
+    pthread_exit(NULL);
+}
+int main() {
+    pthread_t threads[NUM_THREADS];
+    int rc;
+    long t;
+    for(t = 0; t < NUM_THREADS; t++) {
+        rc = pthread_create(&threads[t], NULL, print_message, (void *)t);
+        if (rc) {
+            printf("Error: Unable to create thread, %d\n", rc);
+            exit(-1);
+        }
+    }
+
+    for(t = 0; t < NUM_THREADS; t++) {
+        pthread_join(threads[t], NULL);
+    }
+
+    return 0;
+}
+OUTPUT:
+Thread #0: Hello, World!
+Thread #3: Hello, World!
+Thread #1: Hello, World!
+Thread #2: Hello, World!
+Thread #4: Hello, World!

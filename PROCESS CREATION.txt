@@ -1,0 +1,29 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <unistd.h> 
+ 
+int main() { 
+    pid_t pid = fork(); 
+ 
+    if (pid < 0) { 
+        perror("Fork failed"); 
+        exit(EXIT_FAILURE); 
+    } else if (pid == 0) { 
+        // Child process 
+        execlp("/bin/ls", "ls", NULL); 
+        perror("execlp failed"); 
+        exit(EXIT_FAILURE); 
+    } else { 
+        // Parent process 
+        wait(NULL); 
+        prin ("Child process completed.\n"); 
+    } 
+ 
+    return 0; 
+} 
+ 
+INPUT :  
+OUTPUT :  
+Main 
+Main.c 
+Child process completed.

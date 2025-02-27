@@ -1,0 +1,55 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+ 
+struct Process { 
+    int id; 
+    int burst_me; 
+    int priority; 
+}; 
+ 
+void priority_scheduling(struct Process proc[], int n) { 
+    struct Process temp; 
+     
+    // Sort processes by priority 
+    for (int i = 0; i < n - 1; i++) { 
+        for (int j = 0; j < n - i - 1; j++) { 
+            if (proc[j].priority > proc[j + 1].priority) { 
+                temp = proc[j]; 
+                proc[j] = proc[j + 1]; 
+                proc[j + 1] = temp; 
+            } 
+        } 
+    } 
+ 
+    prin ("Process ID\tBurst Time\tPriority\n"); 
+    for (int i = 0; i < n; i++) { 
+        prin ("%d\t\t%d\t\t%d\n", proc[i].id, proc[i].burst_me, 
+proc[i].priority); 
+    } 
+} 
+ 
+int main() { 
+    struct Process proc[] = { 
+        {1, 10, 2}, 
+        {2, 5, 1}, 
+        {3, 8, 3} 
+    }; 
+    int n = sizeof(proc) / sizeof(proc[0]); 
+     
+priority_scheduling(proc, n); 
+return 0; 
+} 
+INPUT :   
+OUTPUT :  
+Process ID 
+2  
+1  
+3  
+Burst Time 
+5  
+10  
+8  
+Priority 
+1 
+2 
+3

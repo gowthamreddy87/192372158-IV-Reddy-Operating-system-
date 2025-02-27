@@ -1,0 +1,53 @@
+#include <stdio.h> 
+ 
+struct Process { 
+    int id; 
+    int burst_me; 
+    int wai ng_me; 
+    int turnaround_me; 
+}; 
+ 
+void findWai ngTime(struct Process proc[], int n) { 
+    proc[0].wai ng_me = 0; 
+ 
+    for (int i = 1; i < n; i++) { 
+        proc[i].wai ng_me = proc[i - 1].wai ng_me + proc[i - 
+1].burst_me; 
+    } 
+} 
+ 
+void findTurnaroundTime(struct Process proc[], int n) { 
+    for (int i = 0; i < n; i++) { 
+        proc[i].turnaround_me = proc[i].wai ng_me + 
+proc[i].burst_me; 
+    } 
+} 
+ 
+void findavgTime(struct Process proc[], int n) { 
+    findWai ngTime(proc, n); 
+    findTurnaroundTime(proc, n); 
+ 
+    float total_wai ng_me = 0, total_turnaround_me = 0; 
+ 
+    for (int i = 0; i < n; i++) { 
+        total_wai ng_me += proc[i].wai ng_me; 
+        total_turnaround_me += proc[i].turnaround_me; 
+    } 
+ 
+    prin ("Average wai ng me: %.2f\n", total_wai ng_me / 
+n); 
+    prin ("Average turnaround me: %.2f\n", 
+total_turnaround_me / n); 
+} 
+ 
+int main() { 
+    struct Process proc[] = { {1, 10}, {2, 5}, {3, 8} }; 
+    int n = sizeof(proc) / sizeof(proc[0]); 
+ 
+    findavgTime(proc, n); 
+    return 0; 
+} 
+INPUT :  
+OUTPUT: 
+ Average wai ng me: 8.33 
+Average turnaround me: 16.00

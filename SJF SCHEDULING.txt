@@ -1,0 +1,71 @@
+#include <stdio.h> 
+ 
+struct Process { 
+    int id; 
+    int burst_me; 
+}; 
+ 
+void findWai ngTime(struct Process proc[], int n, int 
+wai ng_me[]) { 
+    wai ng_me[0] = 0; 
+ 
+    for (int i = 1; i < n; i++) { 
+        wai ng_me[i] = wai ng_me[i - 1] + proc[i - 
+1].burst_me; 
+    } 
+} 
+ 
+void findTurnAroundTime(struct Process proc[], int n, int 
+wai ng_me[], int turn_around_me[]) { 
+    for (int i = 0; i < n; i++) { 
+        turn_around_me[i] = proc[i].burst_me + wai ng_me[i]; 
+    } 
+} 
+ 
+void findavgTime(struct Process proc[], int n) { 
+    int wai ng_me[n], turn_around_me[n]; 
+ 
+    findWai ngTime(proc, n, wai ng_me); 
+    findTurnAroundTime(proc, n, wai ng_me, 
+turn_around_me); 
+ 
+    float total_wai ng_me = 0, total_turn_around_me = 0; 
+ 
+    for (int i = 0; i < n; i++) { 
+        total_wai ng_me += wai ng_me[i]; 
+        total_turn_around_me += turn_around_me[i]; 
+    } 
+ 
+    prin ("Average wai ng me: %.2f\n", total_wai ng_me / 
+n); 
+    prin ("Average turn around me: %.2f\n", 
+total_turn_around_me / n); 
+} 
+ 
+void sortProcesses(struct Process proc[], int n) { 
+    struct Process temp; 
+    for (int i = 0; i < n - 1; i++) { 
+        for (int j = 0; j < n - i - 1; j++) { 
+            if (proc[j].burst_me > proc[j + 1].burst_me) { 
+                temp = proc[j]; 
+                proc[j] = proc[j + 1]; 
+                proc[j + 1] = temp; 
+            } 
+        } 
+    } 
+} 
+ 
+int main() { 
+    struct Process proc[] = { {1, 6}, {2, 8}, {3, 7}, {4, 3} }; 
+    int n = sizeof(proc) / sizeof(proc[0]); 
+ 
+    sortProcesses(proc, n); 
+    findavgTime(proc, n); 
+ 
+    return 0; 
+} 
+ 
+INPUT :  
+OUTPUT :  
+Average wai ng me: 7.00 
+Average turn around me: 13.00

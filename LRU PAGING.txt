@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define FRAME_SIZE 3
+#define PAGE_SIZE 10
+
+int frames[FRAME_SIZE];
+int pages[PAGE_SIZE];
+int pageFaults = 0;
+
+void initializeFrames() {
+    for (int i = 0; i < FRAME_SIZE; i++) {
+        frames[i] = -1;
+    }
+}
+
+int isPageInFrames(int page) {
+    for (int i = 0; i < FRAME_SIZE; i++) {
+        if (frames[i] == page) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int getLRUIndex(int time[], int n) {
+    int minimum = time[0], index = 0;
+    for (int i = 1; i < n; i++) {
+        if (time[i] < minimum) {
+            minimum = time[i];
+            index = i;
+        }
+    }
+    return index;
+}
+
+void lruPageReplacement() {
+    int time[FRAME_SIZE] = {0};
+    for (int i = 0; i < PAGE_SIZE; i++) {
+        if (!isPageInFrames(pages[i])) {
+            int j;
+            for (j = 0; j < FRAME_SIZE; j++) {
+                if (frames[j] == -1) {
+                    frames[j] = pages[i];
+                    pageFaults++;
+                    time[j] = i;
+                    break;
+                }
+            }
+            if (j == FRAME_SIZE) {
+                int lruIndex = getLRUIndex(time, FRAME_SIZE);
+                frames[lruIndex] = pages[i];
+                pageFaults++;
+                time[lruIndex] = i;
+            }
+        }
+    }
+}
+int main() {
+    initializeFrames();
+    int pageReferenceString[] = {0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 0};
+    for (int i = 0; i < sizeof(pageReferenceString) / sizeof(pageReferenceString[0]); i++) {
+        pages[i] = pageReferenceString[i];
+    }
+    lruPageReplacement();
+    printf("Total Page Faults: %d\n", pageFaults);
+    return 0;
+}
+OUTPUT : 
+Total Page Faults: 12

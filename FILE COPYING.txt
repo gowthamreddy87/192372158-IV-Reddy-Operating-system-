@@ -1,0 +1,40 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+ 
+void copyFile(const char *source, const char *des na on) { 
+    FILE *srcFile, *destFile; 
+    char ch; 
+ 
+    srcFile = fopen(source, "r"); 
+    if (srcFile == NULL) { 
+        perror("Error opening source file"); 
+        exit(EXIT_FAILURE); 
+    } 
+ 
+    destFile = fopen(des na on, "w"); 
+    if (destFile == NULL) { 
+        perror("Error opening des na on file"); 
+        fclose(srcFile); 
+        exit(EXIT_FAILURE); 
+    } 
+ 
+    while ((ch = fgetc(srcFile)) != EOF) { 
+        fputc(ch, destFile); 
+    } 
+ 
+    fclose(srcFile); 
+    fclose(destFile); 
+} 
+ 
+int main() { 
+    const char *sourceFile = "source.txt"; 
+    const char *des na onFile = "des na on.txt"; 
+ 
+    copyFile(sourceFile, des na onFile); 
+    prin ("File copied successfully.\n"); 
+ 
+    return 0; 
+} 
+INPUT :  
+OUTPUT :  
+Usage: /tmp/949K6IhL8a/main.o <source> <des na on>

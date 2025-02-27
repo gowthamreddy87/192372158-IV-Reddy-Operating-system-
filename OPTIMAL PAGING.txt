@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define FRAME_SIZE 4
+#define PAGE_SIZE 4
+#define TOTAL_PAGES 8
+
+int pageFrames[FRAME_SIZE];
+int pageFaults = 0;
+
+void initializeFrames() {
+    for (int i = 0; i < FRAME_SIZE; i++) {
+        pageFrames[i] = -1;
+    }
+}
+
+int isPageInFrames(int page) {
+    for (int i = 0; i < FRAME_SIZE; i++) {
+        if (pageFrames[i] == page) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void replacePage(int page) {
+    int lruIndex = 0;
+    for (int i = 1; i < FRAME_SIZE; i++) {
+        if (pageFrames[i] < pageFrames[lruIndex]) {
+            lruIndex = i;
+        }
+    }
+    pageFrames[lruIndex] = page;
+}
+
+void optimalPaging(int pages[], int n) {
+    initializeFrames();
+    for (int i = 0; i < n; i++) {
+        if (!isPageInFrames(pages[i])) {
+            if (pageFaults < FRAME_SIZE) {
+                pageFrames[pageFaults++] = pages[i];
+            } else {
+                replacePage(pages[i]);
+            }
+            printf("Page fault for page: %d\n", pages[i]);
+        }
+    }
+}
+
+int main() {
+    int pages[TOTAL_PAGES] = {0, 1, 2, 0, 3, 0, 4, 2};
+    optimalPaging(pages, TOTAL_PAGES);
+    printf("Total page faults: %d\n", pageFaults);
+    return 0;
+}
+OUTPUT : 
+Page fault for page: 0
+Page fault for page: 1
+Page fault for page: 2
+Page fault for page: 3
+Page fault for page: 4
+Total page faults: 4

@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define FRAME_SIZE 4
+#define PAGE_SIZE 4
+
+int main() {
+    int pages[] = {0, 1, 2, 3, 0, 4, 5, 1, 2, 3, 4, 5};
+    int frames[FRAME_SIZE] = {-1, -1, -1, -1};
+    int pageFaults = 0;
+    int i, j, k, flag;
+
+    for (i = 0; i < sizeof(pages) / sizeof(pages[0]); i++) {
+        flag = 0;
+
+        for (j = 0; j < FRAME_SIZE; j++) {
+            if (frames[j] == pages[i]) {
+                flag = 1;
+                break;
+            }
+        }
+
+        if (flag == 0) {
+            frames[pageFaults % FRAME_SIZE] = pages[i];
+            pageFaults++;
+        }
+
+        printf("Current Page: %d | Frames: ", pages[i]);
+        for (k = 0; k < FRAME_SIZE; k++) {
+            if (frames[k] != -1) {
+                printf("%d ", frames[k]);
+            }
+        }
+        printf("\n");
+    }
+
+    printf("Total Page Faults: %d\n", pageFaults);
+    return 0;
+}
+OUTPUT : 
+Current Page: 0 | Frames: 0 
+Current Page: 1 | Frames: 0 1 
+Current Page: 2 | Frames: 0 1 2 
+Current Page: 3 | Frames: 0 1 2 3 
+Current Page: 0 | Frames: 0 1 2 3 
+Current Page: 4 | Frames: 4 1 2 3 
+Current Page: 5 | Frames: 4 5 2 3 
+Current Page: 1 | Frames: 4 5 1 3 
+Current Page: 2 | Frames: 4 5 1 2 
+Current Page: 3 | Frames: 3 5 1 2 
+Current Page: 4 | Frames: 3 4 1 2 
+Current Page: 5 | Frames: 3 4 5 2 
+Total Page Faults: 11
