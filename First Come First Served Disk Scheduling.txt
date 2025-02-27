@@ -1,0 +1,20 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void FCFS(int requests[], int n, int head) {
+    int seekCount = 0, distance;
+    for (int i = 0; i < n; i++) {
+        distance = abs(requests[i] - head);
+        seekCount += distance;
+        head = requests[i];
+    }
+    printf("Total Seek Time: %d\n", seekCount);
+}
+
+int main() {
+    int requests[] = {98, 183, 37, 122, 14, 124, 65, 67};
+    int head = 53;
+    printf("First Come First Served Disk Scheduling:\n");
+    FCFS(requests, 8, head);
+    return 0;
+}

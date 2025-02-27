@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void SCAN(int requests[], int n, int head, int diskSize, int direction) {
+    int seekCount = 0, distance;
+    int left[50], right[50], l = 0, r = 0;
+    
+    for (int i = 0; i < n; i++) {
+        if (requests[i] < head)
+            left[l++] = requests[i];
+        else
+            right[r++] = requests[i];
+    }
+    
+    left[l++] = 0;
+    right[r++] = diskSize - 1;
+    
+    qsort(left, l, sizeof(int), (int (*)(const void *, const void *)) strcmp);
+    qsort(right, r, sizeof(int), (int (*)(const void *, const void *)) strcmp);
+    
+    int *scanOrder = direction == 0 ? left : right;
+    int size = direction == 0 ? l : r;
+    
+    for (int i = 0; i < size; i++) {
+        distance = abs(scanOrder[i] - head);
+        seekCount += distance;
+        head = scanOrder[i];
+        printf("%d ", head);
+    }
+    printf("\nTotal Seek Time: %d\n", seekCount);
+}
+
+int main() {
+    int requests[] = {98, 183, 37, 122, 14, 124, 65, 67};
+    int head = 53;
+    printf("SCAN Disk Scheduling:\n");
+    SCAN(requests, 8, head, 200, 1);
+    return 0;
+}

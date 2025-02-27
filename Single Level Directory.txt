@@ -1,0 +1,16 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char directory[10][20];
+    int count = 0;
+    
+    strcpy(directory[count++], "file1.txt");
+    strcpy(directory[count++], "file2.doc");
+    
+    printf("Single Level Directory:\n");
+    for (int i = 0; i < count; i++)
+        printf("%s\n", directory[i]);
+    
+    return 0;
+}
